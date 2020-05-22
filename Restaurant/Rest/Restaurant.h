@@ -63,6 +63,10 @@ private:
 	//VIP Timesteps
 	int AutoP;
 	int VIP_WT;
+	//counters
+	int NoUrgentOrders;
+	int NoUrgentCooks;
+	int NoPromotedCooks;
 public:
 	Restaurant();
 	~Restaurant();
