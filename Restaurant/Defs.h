@@ -34,12 +34,13 @@ enum PROG_MODE	//mode of the program interface
 
 enum COOK_STATUS
 {
-	AVAILABLE,           //available to be assigned
-	BUSY,               //assigned an order
-	INBREAK,            //during break time
-	INJURED,           //injured cooks
-	INREST,
-	URGENT,
+	AVAILABLE,				  //available to be assigned
+	BUSY,				      //Assigned an Order
+	INBREAK,				  //During Break Time
+	INJURED,			      //Injured Cooks
+	INREST,				      //In Rest Period after Injury
+	URGENT_BREAK,		      //In Break Period Cook called for an urgent order
+	URGENT_INREST,		      //In Rest Period Cook called for an Urgent Order
 	COOK_STATUS_CNT
 };
 

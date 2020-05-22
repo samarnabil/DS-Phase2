@@ -761,20 +761,22 @@ void Restaurant::UrgentOrders()
 				//VIP Cooks
 				for (int j = 0; j < c1; j++)
 				{
-					if (arrVIPCook[j]->getStatus() == INJURED || arrVIPCook[j]->getStatus() == INREST || arrVIPCook[j]->getStatus()== INBREAK)
+					if ( arrVIPCook[j]->getStatus() == INREST || arrVIPCook[j]->getStatus()== INBREAK)
 					{
 						//Assign ORD Effect on Order
 						Order* pO;
 						WaitingVIP.dequeue(pO);
 						VIPOrderArr[i]->setStatus(SRV);			
 						AddtoStatusLists(VIPOrderArr[i]);
-					//	arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() / 2);      //decrease its Speed
 						int duration = ceil((double)VIPOrderArr[i]->GetSize() / (double)arrVIPCook[j]->getSpeed());
 						VIPOrderArr[i]->SetFinishTime(duration + CurrentTS);
 						VIPOrderArr[i]->SetServTime(duration);
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign ORD Effect on Cook
-						arrVIPCook[j]->setStatus(URGENT);		//Change Cook status to BUSY after assignment
+						if (arrVIPCook[j]->getStatus() == INBREAK)
+							arrVIPCook[j]->setStatus(URGENT_BREAK);
+						else
+							arrVIPCook[j]->setStatus(URGENT_INREST);
 						arrVIPCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());	//The timestep at which the COOK Status will change
 						break;
 					}
@@ -785,10 +787,17 @@ void Restaurant::UrgentOrders()
 	//Return from Urgent
 	for (int j = 0; j < c1; j++)
 	{
-		if (arrVIPCook[j]->getStatus() == URGENT && arrVIPCook[j]->getChange() == CurrentTS)
+		if (arrVIPCook[j]->getStatus() == URGENT_BREAK && arrVIPCook[j]->getChange() == CurrentTS)
 		{
 			arrVIPCook[j]->setStatus(AVAILABLE);
-			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() * 2);
+			arrVIPCook[j]->setChange(0);
+			arrVIPCook[j]->incNumAvCook();
+			arrVIPCook[j]->incNumAvVIPCook();
+		}
+		else if (arrVIPCook[j]->getStatus() == URGENT_INREST && arrVIPCook[j]->getChange() == CurrentTS)
+		{
+			arrVIPCook[j]->setStatus(AVAILABLE);
+			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() * 2);              //original speed value
 			arrVIPCook[j]->setChange(0);
 			arrVIPCook[j]->incNumAvCook();
 			arrVIPCook[j]->incNumAvVIPCook();
