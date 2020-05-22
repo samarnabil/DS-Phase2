@@ -1,9 +1,9 @@
 FT  ID  AT  WT  ST  
 4   11   2   0   2   
-9   33   5   3   1   
-11   22   4   6   1   
+9   33   5   2   2   
+10   22   4   5   1   
 ....................
 Orders:3   [Norm:2, Veg:0, VIP:1]
 Cooks:1    [Norm:0, Veg:0, VIP:1, Injured:bla bla]
-Avg Wait:3   Avg Serv:1.33
+Avg Wait:2.33   Avg Serv:1.66
 Urgent Orders:bla blah  Auto-promoted:blaaah%

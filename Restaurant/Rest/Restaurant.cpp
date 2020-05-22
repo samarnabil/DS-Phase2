@@ -761,14 +761,14 @@ void Restaurant::UrgentOrders()
 				//VIP Cooks
 				for (int j = 0; j < c1; j++)
 				{
-					if (arrVIPCook[j]->getStatus() == INJURED || arrVIPCook[j]->getStatus() == INREST)
+					if (arrVIPCook[j]->getStatus() == INJURED || arrVIPCook[j]->getStatus() == INREST || arrVIPCook[j]->getStatus()== INBREAK)
 					{
 						//Assign ORD Effect on Order
 						Order* pO;
 						WaitingVIP.dequeue(pO);
 						VIPOrderArr[i]->setStatus(SRV);			
 						AddtoStatusLists(VIPOrderArr[i]);
-						arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() / 2);      //decrease its Speed
+					//	arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() / 2);      //decrease its Speed
 						int duration = ceil((double)VIPOrderArr[i]->GetSize() / (double)arrVIPCook[j]->getSpeed());
 						VIPOrderArr[i]->SetFinishTime(duration + CurrentTS);
 						VIPOrderArr[i]->SetServTime(duration);
@@ -1175,7 +1175,7 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
-			//UrgentOrders();
+			UrgentOrders();
 			BreakHandling();
 			Assignment();
 			InjuryHandling();
