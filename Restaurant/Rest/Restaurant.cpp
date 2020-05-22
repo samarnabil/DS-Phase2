@@ -11,9 +11,6 @@ using namespace std;
 Restaurant::Restaurant() 
 {
 	pGUI = NULL;
-	NoUrgentOrders=0;
-	NoUrgentCooks=0;
-	NoPromotedOrders=0;
 }
 
 void Restaurant::RunSimulation()
@@ -274,9 +271,9 @@ void Restaurant::fileExporting(ofstream &out)
 		AvgStime = floorf((TotalStime/count) * 100) / 100;
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
-		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<NoUrgentCooks<<"]"<<endl;
+		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<"bla bla"<<"]"<<endl;
 		out<<"Avg Wait:"<<AvgWtime<<"   "<<"Avg Serv:"<<AvgStime<<endl;
-		out<<"Urgent Orders:"<<NoUrgentOrders<<"  "<<"Auto-promoted:"<<((NoPromotedOrders/pCo->getNumAvCook())*100)<<endl;
+		out<<"Urgent Orders:"<<"bla blah"<<"  "<<"Auto-promoted:"<<"blaaah%"<<endl;
 		out.close();
 	}
 
@@ -768,8 +765,7 @@ void Restaurant::UrgentOrders()
 						//Assign ORD Effect on Order
 						Order* pO;
 						WaitingVIP.dequeue(pO);
-						VIPOrderArr[i]->setStatus(SRV);	
-						NoUrgentOrders++;
+						VIPOrderArr[i]->setStatus(SRV);			
 						AddtoStatusLists(VIPOrderArr[i]);
 						int duration = ceil((double)VIPOrderArr[i]->GetSize() / (double)arrVIPCook[j]->getSpeed());
 						VIPOrderArr[i]->SetFinishTime(duration + CurrentTS);
@@ -777,15 +773,9 @@ void Restaurant::UrgentOrders()
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign ORD Effect on Cook
 						if (arrVIPCook[j]->getStatus() == INBREAK)
-						{
 							arrVIPCook[j]->setStatus(URGENT_BREAK);
-							NoUrgentCooks++;
-						}
 						else
-						{
 							arrVIPCook[j]->setStatus(URGENT_INREST);
-							NoUrgentCooks++;
-						}
 						arrVIPCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());	//The timestep at which the COOK Status will change
 						break;
 					}
@@ -799,7 +789,6 @@ void Restaurant::UrgentOrders()
 		if (arrVIPCook[j]->getStatus() == URGENT_BREAK && arrVIPCook[j]->getChange() == CurrentTS)
 		{
 			arrVIPCook[j]->setStatus(AVAILABLE);
-			NoUrgentCooks--;
 			arrVIPCook[j]->setChange(0);
 			arrVIPCook[j]->incNumAvCook();
 			arrVIPCook[j]->incNumAvVIPCook();
@@ -807,7 +796,6 @@ void Restaurant::UrgentOrders()
 		else if (arrVIPCook[j]->getStatus() == URGENT_INREST && arrVIPCook[j]->getChange() == CurrentTS)
 		{
 			arrVIPCook[j]->setStatus(AVAILABLE);
-			NoUrgentCooks--;
 			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() * 2);              //original speed value
 			arrVIPCook[j]->setChange(0);
 			arrVIPCook[j]->incNumAvCook();
@@ -907,7 +895,6 @@ void Restaurant::AutoPromotion() {
 		{
 			getWVIPList().enqueueSorted(arr1[i], 1);
 			getWNormList().DeleteNode(arr1[i]);
-			NoPromotedOrders++;
 		}
 	}
 
