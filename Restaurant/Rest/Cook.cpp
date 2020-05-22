@@ -20,7 +20,14 @@ Cook::Cook(int ID,ORD_TYPE type,int speed,int BO,int BN,double InjProp,int RstPr
 	this->status = status;
 	change = 0;
 	numberofFinishedOrders=0;
-	R = 0; ///bagrb el part beta3yy lesa 
+	//Randomizing R
+	/*float r;
+	srand( (unsigned)time( NULL ) );
+	for(int i = 0;i< 2 ; i++)
+	{
+		r=(float)rand()/((float)RAND_MAX+1);
+	}*/
+	R = 0.1; 
 }
 
 

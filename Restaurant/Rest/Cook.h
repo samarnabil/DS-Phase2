@@ -1,7 +1,8 @@
 #pragma once
 
 #include "..\Defs.h"
-
+#include <ctime>
+#include <cstdlib>
 #pragma once
 class Cook
 {

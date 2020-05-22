@@ -19,6 +19,8 @@
 #include "Order.h"
 #include "Cook.h"
 #include <math.h>
+#include <ctime>
+#include <cstdlib>
 // it is the maestro of the project
 class Restaurant  
 {	

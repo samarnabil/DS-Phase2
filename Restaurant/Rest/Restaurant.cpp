@@ -157,6 +157,20 @@ void Restaurant::fileLoading(ifstream &inp)
 		inp>>SNmin>>SNmax>>SGmin>>SGmax>>SVmin>>SVmax;//line 2
 		inp>>BO>>BNmin>>BNmax>>BGmin>>BGmax>>BVmin>>BVmax;//line 3
 		inp>>InjProp>>RstPrd;//line 4
+
+		//Randemizing Speeds
+		/*int SNfinal,SGfinal,SVfinal,BNfinal,BGfinal,BVfinal;
+srand( unsigned(time(NULL)));
+for(int i = 0;i< 2 ; i++)
+{
+SNfinal=(double)rand()/(RAND_MAX+1)*((SNmax+1)-SNmin)+SNmin;
+SGfinal=(double)rand()/(RAND_MAX+1)*((SGmax+1)-SGmin)+SGmin;
+SVfinal=(double)rand()/(RAND_MAX+1)*((SVmax+1)-SVmin)+SVmin;
+BNfinal=(double)rand()/(RAND_MAX+1)*((BNmax+1)-BNmin)+BNmin;
+BGfinal=(double)rand()/(RAND_MAX+1)*((BGmax+1)-BGmin)+BGmin;
+BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
+
+}*/
 		for(int i=0;i<N;i++)
 		{
 			//To be changed later to generate random speeds for every cook
