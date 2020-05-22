@@ -11,7 +11,7 @@ class Cook
 	int BN;//break duration
 	double InjProp;//The probability a busy cook gets injured 
 	int RstPrd;// the rest period 
-	float R; //random number BAGRBB BS LAZEM YETSHAAL!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	float R; 
 	ORD_TYPE type;	        //for each order type there is a corresponding type (VIP, Normal, Vegan)
 	int speed;	        	//dishes it can prepare in one clock tick (in one timestep)
 	COOK_STATUS status;     //for each cook there is a corresponding type (VIP, Normal, Vegan)
@@ -37,7 +37,7 @@ public:
 	int decnumberofFinishedOrders();
 	void setChange(int);
 	int getChange();
-	float GetR();//random number BAGRBB BS LAZEM YETSHAAL!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	float GetR();
 	void setR(float);
 
 	ORD_TYPE GetType() const;

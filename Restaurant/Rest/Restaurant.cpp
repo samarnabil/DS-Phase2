@@ -437,7 +437,7 @@ void Restaurant::Assignment()
 		Order** VIPOrderArr = WaitingVIP.toArray(cVIP);
 		for (int i = 0; i < cVIP; i++)
 		{
-			if (pCo->getNumAvVIPCook() != 0 /*&& VIPOrderArr[i]->getStatus()==WAIT*/)
+			if (pCo->getNumAvVIPCook() != 0 )
 			{
 				for (int j = 0; j < c1; j++)
 				{
@@ -462,7 +462,7 @@ void Restaurant::Assignment()
 				}
 
 			}
-			else if (pCo->getNumAvVIPCook() == 0 && pCo->getNumAvNCook() != 0 /*&& VIPOrderArr[i]->getStatus() == WAIT*/)
+			else if (pCo->getNumAvVIPCook() == 0 && pCo->getNumAvNCook() != 0 )
 			{
 				for (int j = 0; j < c2; j++)
 				{
@@ -487,7 +487,7 @@ void Restaurant::Assignment()
 				}
 
 			}
-			else if (pCo->getNumAvVIPCook() == 0 && pCo->getNumAvNCook() == 0 && pCo->getNumAvVegCook() != 0 /*&& VIPOrderArr[i]->getStatus() == WAIT*/)
+			else if (pCo->getNumAvVIPCook() == 0 && pCo->getNumAvNCook() == 0 && pCo->getNumAvVegCook() != 0 )
 			{
 				for (int j = 0; j < c3; j++)
 				{
@@ -517,7 +517,7 @@ void Restaurant::Assignment()
 		Order** NOrderArr = WaitingNormal.toArray(cNorm);
 		for (int i = 0; i < cNorm; i++)
 		{
-			if (pCo->getNumAvNCook() != 0 /*&& NOrderArr[i]->getStatus() == WAIT*/)
+			if (pCo->getNumAvNCook() != 0 )
 			{
 				for (int j = 0; j < c2; j++)
 				{
@@ -542,7 +542,7 @@ void Restaurant::Assignment()
 
 				}
 			}
-			else if (pCo->getNumAvNCook() == 0 && pCo->getNumAvVIPCook() != 0 /*&& NOrderArr[i]->getStatus() == WAIT*/)
+			else if (pCo->getNumAvNCook() == 0 && pCo->getNumAvVIPCook() != 0 )
 			{
 				for (int j = 0; j < c1; j++)
 				{
@@ -566,7 +566,7 @@ void Restaurant::Assignment()
 					}
 				}
 			}
-			else /*if(NOrderArr[i]->getStatus() == WAIT)*/
+			else 
 			{
 				break;
 			}
@@ -576,7 +576,7 @@ void Restaurant::Assignment()
 		Order** VEGOrderArr = WaitingVegan.toArray(cVeg);
 		for (int i = 0; i < cVeg; i++)
 		{
-			if (pCo->getNumAvVegCook() != 0 /*&& VEGOrderArr[i]->getStatus() == WAIT*/)
+			if (pCo->getNumAvVegCook() != 0 )
 			{
 				for (int j = 0; j < c3; j++)
 				{
@@ -1208,7 +1208,7 @@ void Restaurant::ModesFunction()
 
 
 		//as long as events queue is not empty yet  and no active orders in the system
-		while (!EventsQueue.isEmpty() || !(InService.IsEmpty()))
+		while (!EventsQueue.isEmpty() || !(InService.IsEmpty()) || !(WaitingNormal.IsEmpty()) || !(WaitingVIP.isEmpty()) || !(WaitingVegan.isEmpty()))
 		{
 			setCurrentTS(CurrentTimeStep);
 			//print current timestep
@@ -1220,8 +1220,10 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
+			UrgentOrders();
 			BreakHandling();
 			Assignment();
+			InjuryHandling();
 			FinishLogic();
 			AutoPromotion();
 
@@ -1250,7 +1252,7 @@ void Restaurant::ModesFunction()
 		int CurrentTimeStep = 1;
 
 		//as long as events queue is not empty yet  and no active orders in the system
-		while (!EventsQueue.isEmpty() || !(InService.IsEmpty()))
+		while (!EventsQueue.isEmpty() || !(InService.IsEmpty()) || !(WaitingNormal.IsEmpty()) || !(WaitingVIP.isEmpty()) || !(WaitingVegan.isEmpty()))
 		{
 			setCurrentTS(CurrentTimeStep);
 			//print current timestep
@@ -1262,8 +1264,10 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
+			UrgentOrders();
 			BreakHandling();
 			Assignment();
+			InjuryHandling();
 			FinishLogic();
 			AutoPromotion();
 
