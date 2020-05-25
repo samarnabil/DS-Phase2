@@ -844,7 +844,7 @@ void Restaurant::BreakHandling()
 
 	for (int j = 0; j < c1; j++)
 	{
-		if ((arrVIPCook[j]->getnumberofFinishedOrders() % arrVIPCook[j]->getBO()) == 0  && arrVIPCook[j]->getnumberofFinishedOrders()!=0 && arrVIPCook[j]->getStatus()!=INBREAK )
+		if ((arrVIPCook[j]->getnumberofFinishedOrders() % arrVIPCook[j]->getBO()) == 0  && arrVIPCook[j]->getnumberofFinishedOrders()!=0 && arrVIPCook[j]->getStatus()== AVAILABLE )
 		{
 			arrVIPCook[j]->setStatus(INBREAK);
 			arrVIPCook[j]->setChange(arrVIPCook[j]->getBN() + CurrentTS);
@@ -859,7 +859,7 @@ void Restaurant::BreakHandling()
 	Cook** arrNCook = NormalCookQueue.toArray(c2);
 	for (int j = 0; j < c2; j++)
 	{
-		if ((arrNCook[j]->getnumberofFinishedOrders() % arrNCook[j]->getBO()) == 0 && arrNCook[j]->getnumberofFinishedOrders()!=0 && arrNCook[j]->getChange() == 0 && arrNCook[j]->getStatus() != INBREAK)
+		if ((arrNCook[j]->getnumberofFinishedOrders() % arrNCook[j]->getBO()) == 0 && arrNCook[j]->getnumberofFinishedOrders()!=0  && arrNCook[j]->getStatus() == AVAILABLE)
 		{
 			int duration = arrNCook[j]->getBN();
 
@@ -873,7 +873,7 @@ void Restaurant::BreakHandling()
 	Cook** arrVegCook = VeganCookQueue.toArray(c3);
 	for (int j = 0; j < c3; j++)
 	{
-		if ((arrVegCook[j]->getnumberofFinishedOrders() % arrVegCook[j]->getBO()) == 0 && arrVegCook[j]->getnumberofFinishedOrders()!=0 && arrVegCook[j]->getStatus() != INBREAK )
+		if ((arrVegCook[j]->getnumberofFinishedOrders() % arrVegCook[j]->getBO()) == 0 && arrVegCook[j]->getnumberofFinishedOrders()!=0 && arrVegCook[j]->getStatus() == AVAILABLE )
 		{
 			arrVegCook[j]->setStatus(INBREAK);
 			arrVegCook[j]->setChange(arrVegCook[j]->getBN() + CurrentTS);
