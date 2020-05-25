@@ -11,6 +11,9 @@ using namespace std;
 Restaurant::Restaurant() 
 {
 	pGUI = NULL;
+	NoInjuredCooks=0;
+	NoUrgentOrders=0;
+	NoPromotedOrders=0;
 }
 
 void Restaurant::RunSimulation()
@@ -22,10 +25,10 @@ void Restaurant::RunSimulation()
 	switch (n)
 	{
 	case 0:
-		filename = "Sample1.txt";
+		filename = "TRY1.txt";
 		break;
 	case 1:
-		filename = "Sample2.txt";
+		filename = "d.txt";
 		break;
 	case 2:
 		filename = "Sample3.txt";
@@ -129,7 +132,17 @@ void Restaurant::FillDrawingList()
 	pGUI->ResetDrawingList();
 
 }
-
+float Restaurant::RandomizeR()
+{
+	//Randomizing R
+			float r;
+	srand( (unsigned)time( NULL ) );
+	for(int i = 0;i< 2 ; i++)
+	{
+		r=(float)rand()/((float)RAND_MAX+1);
+	}
+	return r;
+}
 
 
 
@@ -244,6 +257,7 @@ void Restaurant::fileExporting(ofstream &out)
 	int countVeg=0;
 	int countVIP=0;
 	int count = 0;
+	int AutoPromperc;
 	float TotalWtime=0;
 	float TotalStime=0;
 	float AvgStime;
@@ -269,11 +283,13 @@ void Restaurant::fileExporting(ofstream &out)
 		}
 		AvgWtime = floorf((TotalWtime/count) * 100) / 100;
 		AvgStime = floorf((TotalStime/count) * 100) / 100;
+		AutoPromperc= ((NoPromotedOrders/pCo->getNumAvCook())*100);
+
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
-		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<"bla bla"<<"]"<<endl;
+		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<NoInjuredCooks<<"]"<<endl;
 		out<<"Avg Wait:"<<AvgWtime<<"   "<<"Avg Serv:"<<AvgStime<<endl;
-		out<<"Urgent Orders:"<<"bla blah"<<"  "<<"Auto-promoted:"<<"blaaah%"<<endl;
+		out<<"Urgent Orders:"<<NoUrgentOrders<<"  "<<"Auto-promoted:"<<AutoPromperc<<" %"<<endl;
 		out.close();
 	}
 
@@ -614,9 +630,16 @@ void Restaurant::InjuryHandling()
 
 	for (int j = 0; j < c1; j++)
 	{
+	//////////////////////////////////////////////
+		//if (arrVIPCook[j]->getStatus() == BUSY)
+		//{
+		//	arrVIPCook[j]->setR(RandomizeR());
+		//}
+	//////////////////////////////////////////////////////
 		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() && arrVIPCook[j]->GetR() != 0)
 		{
 			arrVIPCook[j]->setStatus(INJURED);
+			NoInjuredCooks++;
 			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed()/2);
 
 
@@ -657,6 +680,10 @@ void Restaurant::InjuryHandling()
 	Cook** arrNCook = NormalCookQueue.toArray(c2);
 	for (int j = 0; j < c2; j++)
 	{
+	/*		if (arrNCook[j]->getStatus() == BUSY)
+		{
+			arrNCook[j]->setR(RandomizeR());
+		}*/
 		if (arrNCook[j]->getStatus() == BUSY && arrNCook[j]->GetR() <= arrNCook[j]->getInjProp() && arrNCook[j]->GetR() != 0)
 		{
 			arrNCook[j]->setStatus(INJURED);
@@ -700,6 +727,10 @@ void Restaurant::InjuryHandling()
 	Cook** arrVegCook = VeganCookQueue.toArray(c3);
 	for (int j = 0; j < c3; j++)
 	{
+	//if (arrVegCook[j]->getStatus() == BUSY)
+	//	{
+	//		arrVegCook[j]->setR(RandomizeR());
+	//	}
 		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp() && arrVegCook[j]->GetR() != 0)
 		{
 			arrVegCook[j]->setStatus(INJURED);
@@ -763,6 +794,7 @@ void Restaurant::UrgentOrders()
 					if ( arrVIPCook[j]->getStatus() == INREST || arrVIPCook[j]->getStatus()== INBREAK)
 					{
 						//Assign ORD Effect on Order
+						NoUrgentOrders++;
 						Order* pO;
 						WaitingVIP.dequeue(pO);
 						VIPOrderArr[i]->setStatus(SRV);			
@@ -895,6 +927,7 @@ void Restaurant::AutoPromotion() {
 		{
 			getWVIPList().enqueueSorted(arr1[i], 1);
 			getWNormList().DeleteNode(arr1[i]);
+			NoPromotedOrders++;
 		}
 	}
 
@@ -1182,6 +1215,8 @@ void Restaurant::ModesFunction()
 			setnuminsameTimeStep(0);    //update the timestep data member
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
+
+
 
 			UrgentOrders();
 			BreakHandling();

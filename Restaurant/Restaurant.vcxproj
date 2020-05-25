@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -160,9 +160,7 @@
   <ItemGroup>
     <Text Include="CMUgraphicsLib\Manual.txt" />
     <Text Include="CMUgraphicsLib\Readme.txt" />
-    <Text Include="Sample1.txt" />
-    <Text Include="Sample2.txt" />
-    <Text Include="Sample3.txt" />
+    <Text Include="Samples\TRY1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

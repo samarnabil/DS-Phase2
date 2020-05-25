@@ -373,7 +373,7 @@ int GUI::getFileName() const
 {
 	int n;
 
-	PrintMessage("Please select the required input file: (1)Sample1, (2)Sample2, (3)Sample3");
+	PrintMessage("Please select the required input file: (1)TC, (2)Sample2, (3)Sample3");
 	string S = GetString();
 	n = (atoi(S.c_str()) - 1);
 

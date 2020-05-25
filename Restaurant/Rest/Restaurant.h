@@ -63,6 +63,11 @@ private:
 	//VIP Timesteps
 	int AutoP;
 	int VIP_WT;
+
+	//Counters
+	int NoInjuredCooks;
+	int NoUrgentOrders;
+	int NoPromotedOrders;
 public:
 	Restaurant();
 	~Restaurant();
@@ -108,7 +113,7 @@ public:
 	void setnuminsameTimeStep(int );
 	void setAutoP(int );
 	void setVIP_WT(int);
-
+	float RandomizeR();
 	void AddtoStatusLists(Order* ptr);     //Adds to the equivalent status list
 
 	//getters
