@@ -165,6 +165,7 @@
     <Text Include="TC3.txt" />
     <Text Include="TC4.txt" />
     <Text Include="TC5.txt" />
+    <Text Include="TC6.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

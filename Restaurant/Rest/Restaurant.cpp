@@ -43,6 +43,9 @@ void Restaurant::RunSimulation()
 	case 4:
 		filename = "TC5.txt";
 		break;
+		case 5:
+		filename = "TC6.txt";
+		break;
 	};
 
 	PROG_MODE	mode = pGUI->getGUIMode();
