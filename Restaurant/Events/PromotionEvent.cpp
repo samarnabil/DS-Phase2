@@ -13,6 +13,7 @@ void PromotionEvent::Execute(Restaurant* pRest)
 	{
 		if (arr1[i]->GetID() == getOrderID())
 		{
+			arr1[i]->setType(TYPE_VIP);
 			pRest->getWVIPList().enqueueSorted(arr1[i], 1);
 			arr1[i]->SettotalMoney(arr1[i]->GettotalMoney() + ExMony);
 			pRest->getWNormList().DeleteNode(arr1[i]);

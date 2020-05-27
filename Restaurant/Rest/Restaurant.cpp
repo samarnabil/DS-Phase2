@@ -936,6 +936,7 @@ void Restaurant::AutoPromotion() {
 	{
 		if ((CurrentTS - arr1[i]->GetArrTime()) == getAutoP())
 		{
+			arr1[i]->setType(TYPE_VIP);
 			getWVIPList().enqueueSorted(arr1[i], 1);
 			getWNormList().DeleteNode(arr1[i]);
 			NoPromotedOrders++;
@@ -1048,52 +1049,65 @@ string Restaurant::array()
 			ORDID = arrF[j]->GetID();
 			if (OrderType == TYPE_NRM)
 			{
+				bool found = false;
 				for (int k = 0; k < c2; k++)			//Normal Cooks
 				{
 					if (arrNCook[k]->getChange() == arrF[j]->GetFinishTime())
 					{
 						CookType = arrNCook[k]->GetType();
 						COOKID = arrNCook[k]->GetID();
-
+						found = true;
 					}
 				}
-
-				for (int k = 0; k < c1; k++)			//VIP Cooks
+				if (!found)
 				{
-					if (arrVIPCook[k]->getChange() == arrF[j]->GetFinishTime())
+					for (int k = 0; k < c1; k++)			//VIP Cooks
 					{
-						CookType = arrVIPCook[k]->GetType();
-						COOKID = arrVIPCook[k]->GetID();
+						if (arrVIPCook[k]->getChange() == arrF[j]->GetFinishTime())
+						{
+							CookType = arrVIPCook[k]->GetType();
+							COOKID = arrVIPCook[k]->GetID();
+							found = true;
+						}
 					}
 				}
 			}
 			else if (OrderType == TYPE_VIP)
 			{
+				bool found = false;
 				for (int k = 0; k < c1; k++)			//VIP Cooks
 				{
 					if (arrVIPCook[k]->getChange() == arrF[j]->GetFinishTime())
 					{
 						CookType = arrVIPCook[k]->GetType();
 						COOKID = arrVIPCook[k]->GetID();
+						found = true;
 					}
 				}
 
-				for (int k = 0; k < c2; k++)			//Normal Cooks
+				if (!found)
 				{
-					if (arrNCook[k]->getChange() == arrF[j]->GetFinishTime())
+					for (int k = 0; k < c2; k++)			//Normal Cooks
 					{
-						CookType = arrNCook[k]->GetType();
-						COOKID = arrNCook[k]->GetID();
-
+						if (arrNCook[k]->getChange() == arrF[j]->GetFinishTime())
+						{
+							CookType = arrNCook[k]->GetType();
+							COOKID = arrNCook[k]->GetID();
+							found = true;
+						}
 					}
 				}
 
-				for (int k = 0; k < c3; k++)			//Vegan Cooks
+				if (!found)
 				{
-					if (arrVegCook[k]->getChange() == arrF[j]->GetFinishTime())
+					for (int k = 0; k < c3; k++)			//Vegan Cooks
 					{
-						CookType = arrVegCook[k]->GetType();
-						COOKID = arrVegCook[k]->GetID();
+						if (arrVegCook[k]->getChange() == arrF[j]->GetFinishTime() && arrVegCook[k]->getStatus())
+						{
+							CookType = arrVegCook[k]->GetType();
+							COOKID = arrVegCook[k]->GetID();
+							found = true;
+						}
 					}
 				}
 			}
