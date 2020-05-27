@@ -67,7 +67,12 @@ private:
 	//Counters
 	int NoInjuredCooks;
 	int NoUrgentOrders;
-	int NoPromotedOrders;
+	float NoPromotedOrders;
+	int TotalCooksNumbers;
+	int NcookNumber;
+	int VcookNumber;
+	int VegcookNumber;
+	
 public:
 	Restaurant();
 	~Restaurant();

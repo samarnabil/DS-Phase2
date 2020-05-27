@@ -275,5 +275,8 @@
     <Text Include="TC4.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="TC5.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

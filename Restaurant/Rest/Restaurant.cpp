@@ -14,6 +14,10 @@ Restaurant::Restaurant()
 	NoInjuredCooks=0;
 	NoUrgentOrders=0;
 	NoPromotedOrders=0;
+	TotalCooksNumbers=0;
+	NcookNumber=0;
+	VcookNumber=0;
+	VegcookNumber=0;
 }
 
 void Restaurant::RunSimulation()
@@ -35,6 +39,9 @@ void Restaurant::RunSimulation()
 		break;
 	case 3:
 		filename = "TC4.txt";
+		break;
+	case 4:
+		filename = "TC5.txt";
 		break;
 	};
 
@@ -138,7 +145,7 @@ void Restaurant::FillDrawingList()
 float Restaurant::RandomizeR()
 {
 	//Randomizing R
-			float r;
+	float r;
 	srand( (unsigned)time( NULL ) );
 	for(int i = 0;i< 2 ; i++)
 	{
@@ -154,7 +161,7 @@ void Restaurant::RandomizingCooks()
 	for(int i=0;i<c1;i++)
 	{
 		if(arrCook[i]->getStatus() == BUSY)
-		arrCook[i]->setR(RandomizeR());
+			arrCook[i]->setR(RandomizeR());
 	}
 
 }
@@ -187,23 +194,25 @@ void Restaurant::fileLoading(ifstream &inp)
 
 		//Randemizing Speeds
 		/*int SNfinal,SGfinal,SVfinal,BNfinal,BGfinal,BVfinal;
-srand( unsigned(time(NULL)));
-for(int i = 0;i< 2 ; i++)
-{
-SNfinal=(double)rand()/(RAND_MAX+1)*((SNmax+1)-SNmin)+SNmin;
-SGfinal=(double)rand()/(RAND_MAX+1)*((SGmax+1)-SGmin)+SGmin;
-SVfinal=(double)rand()/(RAND_MAX+1)*((SVmax+1)-SVmin)+SVmin;
-BNfinal=(double)rand()/(RAND_MAX+1)*((BNmax+1)-BNmin)+BNmin;
-BGfinal=(double)rand()/(RAND_MAX+1)*((BGmax+1)-BGmin)+BGmin;
-BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
+		srand( unsigned(time(NULL)));
+		for(int i = 0;i< 2 ; i++)
+		{
+		SNfinal=(double)rand()/(RAND_MAX+1)*((SNmax+1)-SNmin)+SNmin;
+		SGfinal=(double)rand()/(RAND_MAX+1)*((SGmax+1)-SGmin)+SGmin;
+		SVfinal=(double)rand()/(RAND_MAX+1)*((SVmax+1)-SVmin)+SVmin;
+		BNfinal=(double)rand()/(RAND_MAX+1)*((BNmax+1)-BNmin)+BNmin;
+		BGfinal=(double)rand()/(RAND_MAX+1)*((BGmax+1)-BGmin)+BGmin;
+		BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
 
-}*/
+		}*/
 		for(int i=0;i<N;i++)
 		{
 			//To be changed later to generate random speeds for every cook
 			pCo=new Cook(IDN++,(ORD_TYPE)0,SNmin,BO,BNmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getNormalCookQueue().enqueue(pCo);
+			TotalCooksNumbers++;
+			NcookNumber++;
 
 		}
 		for(int i=0;i<G;i++)
@@ -212,6 +221,8 @@ BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
 			pCo=new Cook(IDVE++,(ORD_TYPE)1,SGmin,BO,BGmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVeganCookQueue().enqueue(pCo);
+			TotalCooksNumbers++;
+			VegcookNumber++;
 
 		}
 		for(int i=0;i<V;i++)
@@ -220,6 +231,8 @@ BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
 			pCo=new Cook(IDVIP++,(ORD_TYPE)2,SVmin,BO,BVmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVIPCookQueue().enqueue(pCo);
+			TotalCooksNumbers++;
+			VcookNumber++;
 
 		}
 		inp>>AutoP>>VIP_WT;//line 5
@@ -280,12 +293,12 @@ void Restaurant::fileExporting(ofstream &out)
 	Order** ServArr = Finished.toArray(count);
 	Cook* pCo;
 	int breeek = 0;
-	int lok=0;
+	int breakk=0;
 	Cook** allcooks = AllCookQueue.toArray(breeek);
 	for(int i=0;i<breeek;i++)
 	{
 		if(allcooks[i]->getStatus() == INBREAK)
-		lok++;
+			breakk++;
 	}
 	if(out.is_open())
 	{
@@ -305,11 +318,11 @@ void Restaurant::fileExporting(ofstream &out)
 		}
 		AvgWtime = floorf((TotalWtime/count) * 100) / 100;
 		AvgStime = floorf((TotalStime/count) * 100) / 100;
-		AutoPromperc= ((NoPromotedOrders/pCo->getNumAvCook())*100);
+		AutoPromperc= ((NoPromotedOrders/TotalCooksNumbers)*100);
 
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
-		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<NoInjuredCooks<<", "<<"Break:"<<lok<<"]"<<endl;
+		out<<"Cooks:"<<TotalCooksNumbers<<"    "<<"[Norm:"<<NcookNumber<<", "<<"Veg:"<<VegcookNumber<<", "<<"VIP:"<<VcookNumber<<", "<<"Injured:"<<NoInjuredCooks<<", "<<"Break:"<<breakk<<"]"<<endl;
 		out<<"Avg Wait:"<<AvgWtime<<"   "<<"Avg Serv:"<<AvgStime<<endl;
 		out<<"Urgent Orders:"<<NoUrgentOrders<<"  "<<"Auto-promoted:"<<AutoPromperc<<" %"<<endl;
 		out.close();
@@ -652,8 +665,8 @@ void Restaurant::InjuryHandling()
 
 	for (int j = 0; j < c1; j++)
 	{
-	//////////////////////////////////////////////
-	//////////////////////////////////////////////////////
+		//////////////////////////////////////////////
+		//////////////////////////////////////////////////////
 		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() && arrVIPCook[j]->GetR() != 0)
 		{
 			arrVIPCook[j]->setStatus(INJURED);
@@ -680,7 +693,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrVIPCook[j]->setStatus(INREST);
 			arrVIPCook[j]->setChange(CurrentTS + arrVIPCook[j]->getRstPrd());
-		//	arrVIPCook[j]->setR(0); //nshelha sa3et l randomization
+			//	arrVIPCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrVIPCook[j]->getChange() == CurrentTS && arrVIPCook[j]->getStatus() == INREST)
@@ -723,7 +736,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrNCook[j]->setStatus(INREST);
 			arrNCook[j]->setChange(CurrentTS + arrNCook[j]->getRstPrd());
-		//	arrNCook[j]->setR(0); //nshelha sa3et l randomization
+			//	arrNCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrNCook[j]->getChange() == CurrentTS && arrNCook[j]->getStatus() == INREST)
@@ -741,7 +754,7 @@ void Restaurant::InjuryHandling()
 	Cook** arrVegCook = VeganCookQueue.toArray(c3);
 	for (int j = 0; j < c3; j++)
 	{
-	
+
 		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp() && arrVegCook[j]->GetR() != 0)
 		{
 			arrVegCook[j]->setStatus(INJURED);
@@ -766,7 +779,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrVegCook[j]->setStatus(INREST);
 			arrVegCook[j]->setChange(CurrentTS + arrVegCook[j]->getRstPrd());
-		//	arrVegCook[j]->setR(0); //nshelha sa3et l randomization
+			//	arrVegCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrVegCook[j]->getChange() == CurrentTS && arrVegCook[j]->getStatus() == INREST)
@@ -1124,7 +1137,7 @@ string Restaurant::array()
 			}
 			//Create an Order with the collected Data
 			Order OR(ORDID, OrderType, CookType, COOKID);
-			
+
 			//Add it to the Array of Orders Finished in the last TS
 			ORDarray[index] = OR;
 			index++;
@@ -1162,7 +1175,7 @@ string Restaurant::array()
 		string b1 = "(";
 		string b2 = ")";
 		string s = Ctype + to_string(COOKID) + b1 + Otype + to_string(ORDID) + b2+"	,	";
-		
+
 		array[i] = s;
 	}
 
@@ -1246,7 +1259,7 @@ void Restaurant::ModesFunction()
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
-	//		RandomizingCooks();
+			//		RandomizingCooks();
 			InjuryHandling();
 			FinishLogic();
 			AutoPromotion();
