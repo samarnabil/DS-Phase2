@@ -113,7 +113,7 @@ public:
 	void setnuminsameTimeStep(int );
 	void setAutoP(int );
 	void setVIP_WT(int);
-	float RandomizeR();
+	
 	void AddtoStatusLists(Order* ptr);     //Adds to the equivalent status list
 
 	//getters
@@ -134,6 +134,9 @@ public:
 
 	void setCurrentTS(int);
 	int getCurrentTS();
+	//Randomizing
+	float RandomizeR();
+	void RandomizingCooks();
 /// ================================================================================================== 
 
 };

@@ -263,7 +263,16 @@
     <Text Include="CMUgraphicsLib\Readme.txt">
       <Filter>CMUGraphicsLib</Filter>
     </Text>
-    <Text Include="Samples\TRY1.txt">
+    <Text Include="TC1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TC2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TC3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TC4.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

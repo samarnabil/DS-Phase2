@@ -25,13 +25,16 @@ void Restaurant::RunSimulation()
 	switch (n)
 	{
 	case 0:
-		filename = "TRY1.txt";
+		filename = "TC1.txt";
 		break;
 	case 1:
-		filename = "d.txt";
+		filename = "TC2.txt";
 		break;
 	case 2:
-		filename = "Sample3.txt";
+		filename = "TC3.txt";
+		break;
+	case 3:
+		filename = "TC4.txt";
 		break;
 	};
 
@@ -142,6 +145,18 @@ float Restaurant::RandomizeR()
 		r=(float)rand()/((float)RAND_MAX+1);
 	}
 	return r;
+}
+void Restaurant::RandomizingCooks()
+{
+	Cook* pCo;
+	int c1 = 0;
+	Cook** arrCook = AllCookQueue.toArray(c1);
+	for(int i=0;i<c1;i++)
+	{
+		if(arrCook[i]->getStatus() == BUSY)
+		arrCook[i]->setR(RandomizeR());
+	}
+
 }
 
 
@@ -264,7 +279,14 @@ void Restaurant::fileExporting(ofstream &out)
 	float AvgWtime;
 	Order** ServArr = Finished.toArray(count);
 	Cook* pCo;
-
+	int breeek = 0;
+	int lok=0;
+	Cook** allcooks = AllCookQueue.toArray(breeek);
+	for(int i=0;i<breeek;i++)
+	{
+		if(allcooks[i]->getStatus() == INBREAK)
+		lok++;
+	}
 	if(out.is_open())
 	{
 		out<<"FT  "<<"ID  "<<"AT  "<<"WT  "<<"ST  "<<endl;
@@ -287,7 +309,7 @@ void Restaurant::fileExporting(ofstream &out)
 
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
-		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<NoInjuredCooks<<"]"<<endl;
+		out<<"Cooks:"<<pCo->getNumAvCook()<<"    "<<"[Norm:"<<pCo->getNumAvNCook()<<", "<<"Veg:"<<pCo->getNumAvVegCook()<<", "<<"VIP:"<<pCo->getNumAvVIPCook()<<", "<<"Injured:"<<NoInjuredCooks<<", "<<"Break:"<<lok<<"]"<<endl;
 		out<<"Avg Wait:"<<AvgWtime<<"   "<<"Avg Serv:"<<AvgStime<<endl;
 		out<<"Urgent Orders:"<<NoUrgentOrders<<"  "<<"Auto-promoted:"<<AutoPromperc<<" %"<<endl;
 		out.close();
@@ -631,10 +653,6 @@ void Restaurant::InjuryHandling()
 	for (int j = 0; j < c1; j++)
 	{
 	//////////////////////////////////////////////
-		//if (arrVIPCook[j]->getStatus() == BUSY)
-		//{
-		//	arrVIPCook[j]->setR(RandomizeR());
-		//}
 	//////////////////////////////////////////////////////
 		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() && arrVIPCook[j]->GetR() != 0)
 		{
@@ -662,7 +680,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrVIPCook[j]->setStatus(INREST);
 			arrVIPCook[j]->setChange(CurrentTS + arrVIPCook[j]->getRstPrd());
-			arrVIPCook[j]->setR(0); //nshelha sa3et l randomization
+		//	arrVIPCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrVIPCook[j]->getChange() == CurrentTS && arrVIPCook[j]->getStatus() == INREST)
@@ -680,10 +698,6 @@ void Restaurant::InjuryHandling()
 	Cook** arrNCook = NormalCookQueue.toArray(c2);
 	for (int j = 0; j < c2; j++)
 	{
-	/*		if (arrNCook[j]->getStatus() == BUSY)
-		{
-			arrNCook[j]->setR(RandomizeR());
-		}*/
 		if (arrNCook[j]->getStatus() == BUSY && arrNCook[j]->GetR() <= arrNCook[j]->getInjProp() && arrNCook[j]->GetR() != 0)
 		{
 			arrNCook[j]->setStatus(INJURED);
@@ -709,7 +723,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrNCook[j]->setStatus(INREST);
 			arrNCook[j]->setChange(CurrentTS + arrNCook[j]->getRstPrd());
-			arrNCook[j]->setR(0); //nshelha sa3et l randomization
+		//	arrNCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrNCook[j]->getChange() == CurrentTS && arrNCook[j]->getStatus() == INREST)
@@ -727,10 +741,7 @@ void Restaurant::InjuryHandling()
 	Cook** arrVegCook = VeganCookQueue.toArray(c3);
 	for (int j = 0; j < c3; j++)
 	{
-	//if (arrVegCook[j]->getStatus() == BUSY)
-	//	{
-	//		arrVegCook[j]->setR(RandomizeR());
-	//	}
+	
 		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp() && arrVegCook[j]->GetR() != 0)
 		{
 			arrVegCook[j]->setStatus(INJURED);
@@ -755,7 +766,7 @@ void Restaurant::InjuryHandling()
 		{
 			arrVegCook[j]->setStatus(INREST);
 			arrVegCook[j]->setChange(CurrentTS + arrVegCook[j]->getRstPrd());
-			arrVegCook[j]->setR(0); //nshelha sa3et l randomization
+		//	arrVegCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
 		if (arrVegCook[j]->getChange() == CurrentTS && arrVegCook[j]->getStatus() == INREST)
@@ -1221,6 +1232,7 @@ void Restaurant::ModesFunction()
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
+	//		RandomizingCooks();
 			InjuryHandling();
 			FinishLogic();
 			AutoPromotion();
