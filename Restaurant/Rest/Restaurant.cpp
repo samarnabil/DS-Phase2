@@ -321,7 +321,7 @@ void Restaurant::fileExporting(ofstream &out)
 		}
 		AvgWtime = floorf((TotalWtime/count) * 100) / 100;
 		AvgStime = floorf((TotalStime/count) * 100) / 100;
-		AutoPromperc= ((NoPromotedOrders/TotalCooksNumbers)*100);
+		AutoPromperc= ((NoPromotedOrders/count)*100);
 
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
@@ -1356,7 +1356,7 @@ void Restaurant::ModesFunction()
 			FinishLogic();
 			AutoPromotion();
 
-			Sleep(1000);         //wait for 1 second
+			Sleep(1);         //wait for 1 second
 			CurrentTimeStep++;	//advance timestep
 
 		}
