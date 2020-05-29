@@ -705,7 +705,7 @@ void Restaurant::InjuryHandling()
 					{
 						int remainingDishes = ServArr[i]->GetSize() - (arrC[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
 						int duration = ceil((double)remainingDishes / (double)arrC[j]->getSpeed());				 //new decreased speed
-						ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
+						ServArr[i]->SetServTime(duration + (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
 						ServArr[i]->SetFinishTime(duration + CurrentTS);
 						arrC[j]->setChange(ServArr[i]->GetFinishTime());
 					}
