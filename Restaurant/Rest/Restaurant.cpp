@@ -170,11 +170,11 @@ void Restaurant::RandomizingCooks()
 	}
 
 }
-void Restaurant::setR(int r)
+void Restaurant::setR(float r)
 {
 	R=r;
 }
-int Restaurant::getR()
+float Restaurant::getR()
 {
 	return R;
 }
@@ -1209,7 +1209,7 @@ void Restaurant::ModesFunction()
 
 
 			//RandomizingCooks();
-			setR(RandomizeR());
+		//	setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
