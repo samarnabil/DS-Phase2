@@ -32,6 +32,7 @@ private:
 	//
 	int CurrentTS;
 	int numinsameTimeStep;
+	int LastassignedcookID;
 	string filename;
 	PROG_MODE sim_mode;     //simulation mode indicator
 
@@ -136,7 +137,8 @@ public:
 	int getnuminsameTimeStep();
 	int getAutoP();
 	int getVIP_WT();
-
+	int getLastassignedcookID();
+	void setLastassignedcookID(int);
 	void setCurrentTS(int);
 	int getCurrentTS();
 	//Randomizing

@@ -18,6 +18,7 @@ Restaurant::Restaurant()
 	NcookNumber=0;
 	VcookNumber=0;
 	VegcookNumber=0;
+	LastassignedcookID=-1;
 }
 
 void Restaurant::RunSimulation()
@@ -150,7 +151,7 @@ float Restaurant::RandomizeR()
 	//Randomizing R
 	float r;
 	srand( (unsigned)time( NULL ) );
-	for(int i = 0;i< 10 ; i++)
+	for(int i = 0;i< 2 ; i++)
 	{
 		r=(float)rand()/((float)RAND_MAX+1);
 	}
@@ -163,7 +164,7 @@ void Restaurant::RandomizingCooks()
 	Cook** arrCook = AllCookQueue.toArray(c1);
 	for(int i=0;i<c1;i++)
 	{
-		if(arrCook[i]->getStatus() == BUSY && arrCook[i]->getStatus() != INJURED )
+		if(arrCook[i]->GetID() == getLastassignedcookID() && arrCook[i]->getStatus() == BUSY )
 			arrCook[i]->setR(RandomizeR());
 	}
 
@@ -186,7 +187,7 @@ void Restaurant::fileLoading(ifstream &inp)
 	int N,G,V,SNmin,SNmax,SGmin,SGmax,SVmin,SVmax,BO,BNmin,BNmax,BGmin,BGmax,BVmin,BVmax,AutoP,M,TS,IDE,IDC,IDP,SIZE,MONY,ExMony,RstPrd,VIP_WT;
 	char TYP,eventType;
 	double InjProp;
-	int IDVIP=1,IDN=1,IDVE=1;
+	int IDcook=1;
 	if(inp.is_open())
 	{
 		//To be changed later to generate random speeds for every cook
@@ -211,7 +212,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		for(int i=0;i<N;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDN++,(ORD_TYPE)0,SNmin,BO,BNmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)0,SNmin,BO,BNmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getNormalCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -221,7 +222,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		for(int i=0;i<G;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDVE++,(ORD_TYPE)1,SGmin,BO,BGmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)1,SGmin,BO,BGmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVeganCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -231,7 +232,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		for(int i=0;i<V;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDVIP++,(ORD_TYPE)2,SVmin,BO,BVmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)2,SVmin,BO,BVmin,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVIPCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -420,6 +421,14 @@ int Restaurant::getVIP_WT()
 {
 	return VIP_WT;
 }
+	int Restaurant::getLastassignedcookID()
+	{
+		return LastassignedcookID;
+	}
+	void Restaurant::setLastassignedcookID(int io)
+	{
+		LastassignedcookID=io;
+	}
 //Adds Order to the equivalent Queue.
 void Restaurant::AddtoEveryWaitType(Order* ptr) {
 
@@ -507,6 +516,7 @@ void Restaurant::Assignment()
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign ORD Effect on Cook
 						arrVIPCook[j]->setStatus(BUSY);		//Change Cook status to BUSY after assignment
+						setLastassignedcookID(arrVIPCook[j]->GetID());
 						arrVIPCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());	//The timestep at which the COOK Status will change
 						pCo->decNumAvCook();		//Update the stats of Available Cooks
 						pCo->decNumAvVIPCook();
@@ -532,6 +542,7 @@ void Restaurant::Assignment()
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign ORD Effect on Cook
 						arrNCook[j]->setStatus(BUSY);
+					    setLastassignedcookID(arrNCook[j]->GetID());
 						arrNCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvNCook();
@@ -557,6 +568,7 @@ void Restaurant::Assignment()
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign Order Effect on Cook
 						arrVegCook[j]->setStatus(BUSY);
+						setLastassignedcookID(arrVegCook[j]->GetID());
 						arrVegCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvVegCook();
@@ -587,6 +599,7 @@ void Restaurant::Assignment()
 						NOrderArr[i]->SetWaitTime(CurrentTS - NOrderArr[i]->GetArrTime());
 						//Assign ORD Effcet on Cook
 						arrNCook[j]->setStatus(BUSY);
+						setLastassignedcookID(arrNCook[j]->GetID());
 						arrNCook[j]->setChange(NOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvNCook();
@@ -612,6 +625,7 @@ void Restaurant::Assignment()
 						NOrderArr[i]->SetWaitTime(CurrentTS - NOrderArr[i]->GetArrTime());
 						//Assign ORD Effcet on Cook
 						arrVIPCook[j]->setStatus(BUSY);
+						setLastassignedcookID(arrVIPCook[j]->GetID());
 						arrVIPCook[j]->setChange(NOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvVIPCook();
@@ -646,6 +660,7 @@ void Restaurant::Assignment()
 						VEGOrderArr[i]->SetWaitTime(CurrentTS - VEGOrderArr[i]->GetArrTime());
 						//Assign ORD Effcet on Cook
 						arrVegCook[j]->setStatus(BUSY);
+						setLastassignedcookID(arrVegCook[j]->GetID());
 						arrVegCook[j]->setChange(VEGOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvVegCook();
