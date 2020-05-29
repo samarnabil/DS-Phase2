@@ -205,7 +205,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		inp>>InjProp>>RstPrd;//line 4
 
 		//Randemizing Speeds
-		/*int SNfinal,SGfinal,SVfinal,BNfinal,BGfinal,BVfinal;
+		int SNfinal,SGfinal,SVfinal,BNfinal,BGfinal,BVfinal;
 		srand( unsigned(time(NULL)));
 		for(int i = 0;i< 2 ; i++)
 		{
@@ -216,11 +216,11 @@ void Restaurant::fileLoading(ifstream &inp)
 		BGfinal=(double)rand()/(RAND_MAX+1)*((BGmax+1)-BGmin)+BGmin;
 		BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
 
-		}*/
+		}
 		for(int i=0;i<N;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDcook++,(ORD_TYPE)0,SNmin,BO,BNmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)0,SNfinal,BO,BNfinal,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getNormalCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -230,7 +230,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		for(int i=0;i<G;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDcook++,(ORD_TYPE)1,SGmin,BO,BGmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)1,SGfinal,BO,BGfinal,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVeganCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -240,7 +240,7 @@ void Restaurant::fileLoading(ifstream &inp)
 		for(int i=0;i<V;i++)
 		{
 			//To be changed later to generate random speeds for every cook
-			pCo=new Cook(IDcook++,(ORD_TYPE)2,SVmin,BO,BVmin,InjProp,RstPrd);
+			pCo=new Cook(IDcook++,(ORD_TYPE)2,SVfinal,BO,BVfinal,InjProp,RstPrd);
 			getAllCookQueue().enqueue(pCo);
 			getVIPCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
@@ -1209,7 +1209,7 @@ void Restaurant::ModesFunction()
 
 
 			//RandomizingCooks();
-		//	setR(RandomizeR());
+			setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1255,7 +1255,7 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
-			RandomizingCooks();
+		//	RandomizingCooks();
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1301,7 +1301,7 @@ void Restaurant::ModesFunction()
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
 			//RandomizingCooks();
-			setR(RandomizeR());
+			//setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();

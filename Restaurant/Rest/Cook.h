@@ -9,7 +9,7 @@ class Cook
 	int ID;
 	int BO;//the number of orders a cook must prepare before taking a break
 	int BN;//break duration
-	double InjProp;//The probability a busy cook gets injured 
+	float InjProp;//The probability a busy cook gets injured 
 	int RstPrd;// the rest period 
 	float R; 
 	ORD_TYPE type;	        //for each order type there is a corresponding type (VIP, Normal, Vegan)
@@ -24,12 +24,12 @@ class Cook
 
 public:
     Cook();
-	Cook(int ID,ORD_TYPE type,int speed,int BO,int BN,double InjProp,int RstPrd,COOK_STATUS status=AVAILABLE);
+	Cook(int ID,ORD_TYPE type,int speed,int BO,int BN,float InjProp,int RstPrd,COOK_STATUS status=AVAILABLE);
 	virtual ~Cook();
 	int GetID() const;
 	int getBO() const;
 	int getBN() const;
-	double getInjProp() const;
+	float getInjProp() const;
 	int getRstPrd() const;
 	int getSpeed() const;
 	int getnumberofFinishedOrders() const;
@@ -45,7 +45,7 @@ public:
 	void setBO(int);
 	void setSpeed(float);
 	void setBN(int);
-	void setInjProp(double);
+	void setInjProp(float);
 	void setRstPrd(int);
 	void setType(ORD_TYPE) ;
 	void setStatus(COOK_STATUS);

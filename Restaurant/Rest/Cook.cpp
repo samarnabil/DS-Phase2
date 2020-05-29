@@ -2,7 +2,7 @@
 
 Cook::Cook()
 {}
-Cook::Cook(int ID,ORD_TYPE type,int speed,int BO,int BN,double InjProp,int RstPrd ,COOK_STATUS status)
+Cook::Cook(int ID,ORD_TYPE type,int speed,int BO,int BN,float InjProp,int RstPrd ,COOK_STATUS status)
 {
 	NumAvCook++;
 	this->ID=ID;
@@ -41,7 +41,7 @@ int Cook::getBN() const
 {
 	return BN;
 }
-double Cook::getInjProp() const
+float Cook::getInjProp() const
 {
 	return InjProp;
 }
@@ -70,7 +70,7 @@ void Cook::setRstPrd(int rst)
 {
 	RstPrd=rst;
 }
-void Cook::setInjProp(double prp)
+void Cook::setInjProp(float prp)
 {
 	InjProp=prp;
 }
