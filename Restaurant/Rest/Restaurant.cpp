@@ -150,7 +150,7 @@ float Restaurant::RandomizeR()
 	//Randomizing R
 	float r;
 	srand( (unsigned)time( NULL ) );
-	for(int i = 0;i< 2 ; i++)
+	for(int i = 0;i< 10 ; i++)
 	{
 		r=(float)rand()/((float)RAND_MAX+1);
 	}
@@ -683,7 +683,7 @@ void Restaurant::InjuryHandling()
 			{
 				if(ServArr[i]->GetFinishTime() == arrVIPCook[j]->getChange())
 				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrVIPCook[j]->getSpeed() * 2 * (CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime()));
+					int remainingDishes = ServArr[i]->GetSize() - (arrVIPCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
 					int duration = ceil((double)remainingDishes / (double)arrVIPCook[j]->getSpeed());				 //new decreased speed
 					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
 					ServArr[i]->SetFinishTime(duration + CurrentTS);
@@ -727,7 +727,7 @@ void Restaurant::InjuryHandling()
 			{
 				if (ServArr[i]->GetFinishTime() == arrNCook[j]->getChange())
 				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrNCook[j]->getSpeed() * 2 * (CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime()));
+					int remainingDishes = ServArr[i]->GetSize() - (arrNCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
 					int duration = ceil((double)remainingDishes / (double)arrNCook[j]->getSpeed());				 //new decreased speed
 					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
 					ServArr[i]->SetFinishTime(duration + CurrentTS);
@@ -772,7 +772,7 @@ void Restaurant::InjuryHandling()
 			{
 				if (ServArr[i]->GetFinishTime() == arrVegCook[j]->getChange())
 				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrVegCook[j]->getSpeed() * 2 * (CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime()));
+					int remainingDishes = ServArr[i]->GetSize() - (arrVegCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
 					int duration = ceil((double)remainingDishes / (double)arrVegCook[j]->getSpeed());				 //new decreased speed
 					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
 					ServArr[i]->SetFinishTime(duration + CurrentTS);
@@ -1307,6 +1307,7 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
+			RandomizingCooks();
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1351,6 +1352,7 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
+			RandomizingCooks();
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
