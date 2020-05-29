@@ -19,6 +19,7 @@ Restaurant::Restaurant()
 	VcookNumber=0;
 	VegcookNumber=0;
 	LastassignedcookID=-1;
+	R=1;
 }
 
 void Restaurant::RunSimulation()
@@ -44,7 +45,7 @@ void Restaurant::RunSimulation()
 	case 4:
 		filename = "TC5.txt";
 		break;
-		case 5:
+	case 5:
 		filename = "TC6.txt";
 		break;
 	};
@@ -169,7 +170,14 @@ void Restaurant::RandomizingCooks()
 	}
 
 }
-
+void Restaurant::setR(int r)
+{
+	R=r;
+}
+int Restaurant::getR()
+{
+	return R;
+}
 
 
 
@@ -421,14 +429,14 @@ int Restaurant::getVIP_WT()
 {
 	return VIP_WT;
 }
-	int Restaurant::getLastassignedcookID()
-	{
-		return LastassignedcookID;
-	}
-	void Restaurant::setLastassignedcookID(int io)
-	{
-		LastassignedcookID=io;
-	}
+int Restaurant::getLastassignedcookID()
+{
+	return LastassignedcookID;
+}
+void Restaurant::setLastassignedcookID(int io)
+{
+	LastassignedcookID=io;
+}
 //Adds Order to the equivalent Queue.
 void Restaurant::AddtoEveryWaitType(Order* ptr) {
 
@@ -542,7 +550,7 @@ void Restaurant::Assignment()
 						VIPOrderArr[i]->SetWaitTime(CurrentTS - VIPOrderArr[i]->GetArrTime());
 						//Assign ORD Effect on Cook
 						arrNCook[j]->setStatus(BUSY);
-					    setLastassignedcookID(arrNCook[j]->GetID());
+						setLastassignedcookID(arrNCook[j]->GetID());
 						arrNCook[j]->setChange(VIPOrderArr[i]->GetFinishTime());
 						pCo->decNumAvCook();
 						pCo->decNumAvNCook();
@@ -677,141 +685,57 @@ void Restaurant::Assignment()
 }
 void Restaurant::InjuryHandling() 
 {
-	//VIP Injuries
-	int c1 = 0;
-	Cook** arrVIPCook = VIPCookQueue.toArray(c1);
+	int count1 = 0;
+	Cook** arrC = AllCookQueue.toArray(count1);
 
-	for (int j = 0; j < c1; j++)
+	for (int j = 0; j < count1; j++)
 	{
-		//////////////////////////////////////////////
-		//////////////////////////////////////////////////////
-		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() )
-		{
-			arrVIPCook[j]->setStatus(INJURED);
-			NoInjuredCooks++;
-			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed()/2);
+		if(getLastassignedcookID() == arrC[j]->GetID() && getR() <= arrC[j]->getInjProp() && arrC[j]->getStatus() == BUSY)
+		{		
+				arrC[j]->setStatus(INJURED);
+				NoInjuredCooks++;
+				arrC[j]->setSpeed(arrC[j]->getSpeed()/2);
 
 
-			int ServC = 0;
-			Order** ServArr = InService.toArray(ServC);
-			for (int i = 0; i < ServC; i++)
-			{
-				if(ServArr[i]->GetFinishTime() == arrVIPCook[j]->getChange())
+				int ServC = 0;
+				Order** ServArr = InService.toArray(ServC);
+				for (int i = 0; i < ServC; i++)
 				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrVIPCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
-					int duration = ceil((double)remainingDishes / (double)arrVIPCook[j]->getSpeed());				 //new decreased speed
-					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
-					ServArr[i]->SetFinishTime(duration + CurrentTS);
-					arrVIPCook[j]->setChange(ServArr[i]->GetFinishTime());
+					if(ServArr[i]->GetFinishTime() == arrC[j]->getChange())
+					{
+						int remainingDishes = ServArr[i]->GetSize() - (arrC[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
+						int duration = ceil((double)remainingDishes / (double)arrC[j]->getSpeed());				 //new decreased speed
+						ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
+						ServArr[i]->SetFinishTime(duration + CurrentTS);
+						arrC[j]->setChange(ServArr[i]->GetFinishTime());
+					}
 				}
-			}
+
+			
 		}
 		//rest period
-		if (arrVIPCook[j]->getChange() == CurrentTS && arrVIPCook[j]->getStatus() == INJURED)
+		if (arrC[j]->getChange() == CurrentTS && arrC[j]->getStatus() == INJURED)
 		{
-			arrVIPCook[j]->setStatus(INREST);
-			arrVIPCook[j]->setChange(CurrentTS + arrVIPCook[j]->getRstPrd());
+			arrC[j]->setStatus(INREST);
+			arrC[j]->setChange(CurrentTS + arrC[j]->getRstPrd());
 			//	arrVIPCook[j]->setR(0); //nshelha sa3et l randomization
 		}
 		//back from rest
-		if (arrVIPCook[j]->getChange() == CurrentTS && arrVIPCook[j]->getStatus() == INREST)
+		if (arrC[j]->getChange() == CurrentTS && arrC[j]->getStatus() == INREST)
 		{
-			arrVIPCook[j]->setStatus(AVAILABLE);
-			arrVIPCook[j]->setSpeed(arrVIPCook[j]->getSpeed() * 2);			//return to the original speed
-			arrVIPCook[j]->setChange(0);
-			arrVIPCook[j]->incNumAvCook();
-			arrVIPCook[j]->incNumAvVIPCook();
+			arrC[j]->setStatus(AVAILABLE);
+			arrC[j]->setSpeed(arrC[j]->getSpeed() * 2);			//return to the original speed
+			arrC[j]->setChange(0);
+			arrC[j]->incNumAvCook();
+			arrC[j]->incNumAvVIPCook();
 		}
+
+
+
+
 	}
 
-	//Normal Injuries
-	int c2 = 0;
-	Cook** arrNCook = NormalCookQueue.toArray(c2);
-	for (int j = 0; j < c2; j++)
-	{
-		if (arrNCook[j]->getStatus() == BUSY && arrNCook[j]->GetR() <= arrNCook[j]->getInjProp() )
-		{
-			arrNCook[j]->setStatus(INJURED);
-			arrNCook[j]->setSpeed(arrNCook[j]->getSpeed() / 2);
-			NoInjuredCooks++;
 
-
-			int ServC = 0;
-			Order** ServArr = InService.toArray(ServC);
-			for (int i = 0; i < ServC; i++)
-			{
-				if (ServArr[i]->GetFinishTime() == arrNCook[j]->getChange())
-				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrNCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
-					int duration = ceil((double)remainingDishes / (double)arrNCook[j]->getSpeed());				 //new decreased speed
-					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
-					ServArr[i]->SetFinishTime(duration + CurrentTS);
-					arrNCook[j]->setChange(ServArr[i]->GetFinishTime());
-				}
-
-			}
-		}
-		//rest period
-		if (arrNCook[j]->getChange() == CurrentTS && arrNCook[j]->getStatus() == INJURED)
-		{
-			arrNCook[j]->setStatus(INREST);
-			arrNCook[j]->setChange(CurrentTS + arrNCook[j]->getRstPrd());
-			//	arrNCook[j]->setR(0); //nshelha sa3et l randomization
-		}
-		//back from rest
-		if (arrNCook[j]->getChange() == CurrentTS && arrNCook[j]->getStatus() == INREST)
-		{
-			arrNCook[j]->setStatus(AVAILABLE);
-			arrNCook[j]->setSpeed(arrNCook[j]->getSpeed() * 2);			//return to the original speed
-			arrNCook[j]->setChange(0);
-			arrNCook[j]->incNumAvCook();
-			arrNCook[j]->incNumAvNCook();
-		}
-	}
-
-	//Vegan Injuries
-	int c3 = 0;
-	Cook** arrVegCook = VeganCookQueue.toArray(c3);
-	for (int j = 0; j < c3; j++)
-	{
-
-		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp())
-		{
-			arrVegCook[j]->setStatus(INJURED);
-			arrVegCook[j]->setSpeed(arrVegCook[j]->getSpeed() / 2);
-			NoInjuredCooks++;
-
-			int ServC = 0;
-			Order** ServArr = InService.toArray(ServC);
-			for (int i = 0; i < ServC; i++)
-			{
-				if (ServArr[i]->GetFinishTime() == arrVegCook[j]->getChange())
-				{
-					int remainingDishes = ServArr[i]->GetSize() - (arrVegCook[j]->getSpeed() * 2 * (CurrentTS - (ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime())));
-					int duration = ceil((double)remainingDishes / (double)arrVegCook[j]->getSpeed());				 //new decreased speed
-					ServArr[i]->SetServTime(duration + CurrentTS - ServArr[i]->GetArrTime() + ServArr[i]->getWaitTime());
-					ServArr[i]->SetFinishTime(duration + CurrentTS);
-					arrVegCook[j]->setChange(ServArr[i]->GetFinishTime());
-				}
-			}
-		}
-		//rest period
-		if (arrVegCook[j]->getChange() == CurrentTS && arrVegCook[j]->getStatus() == INJURED)
-		{
-			arrVegCook[j]->setStatus(INREST);
-			arrVegCook[j]->setChange(CurrentTS + arrVegCook[j]->getRstPrd());
-			//	arrVegCook[j]->setR(0); //nshelha sa3et l randomization
-		}
-		//back from rest
-		if (arrVegCook[j]->getChange() == CurrentTS && arrVegCook[j]->getStatus() == INREST)
-		{
-			arrVegCook[j]->setStatus(AVAILABLE);
-			arrVegCook[j]->setSpeed(arrVegCook[j]->getSpeed() * 2);			//return to the original speed
-			arrVegCook[j]->setChange(0);
-			arrVegCook[j]->incNumAvCook();
-			arrVegCook[j]->incNumAvVegCook();
-		}
-	}
 }
 
 //Urgent Orders
@@ -1276,7 +1200,8 @@ void Restaurant::ModesFunction()
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
 
-			RandomizingCooks();
+			//RandomizingCooks();
+			setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1367,7 +1292,8 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
-			RandomizingCooks();
+			//RandomizingCooks();
+			setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();

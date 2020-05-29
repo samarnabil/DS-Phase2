@@ -73,6 +73,7 @@ private:
 	int NcookNumber;
 	int VcookNumber;
 	int VegcookNumber;
+	int R;
 	
 public:
 	Restaurant();
@@ -141,6 +142,8 @@ public:
 	void setLastassignedcookID(int);
 	void setCurrentTS(int);
 	int getCurrentTS();
+	void setR(int);
+	int getR();
 	//Randomizing
 	float RandomizeR();
 	void RandomizingCooks();
