@@ -727,7 +727,15 @@ void Restaurant::InjuryHandling()
 			arrC[j]->setSpeed(arrC[j]->getSpeed() * 2);			//return to the original speed
 			arrC[j]->setChange(0);
 			arrC[j]->incNumAvCook();
-			arrC[j]->incNumAvVIPCook();
+			if(arrC[j]->GetType() == TYPE_NRM)
+			    arrC[j]->incNumAvNCook();
+			else if(arrC[j]->GetType() == TYPE_VGAN)
+				arrC[j]->incNumAvVegCook();
+			else
+				arrC[j]->incNumAvVIPCook();
+
+
+
 		}
 
 
