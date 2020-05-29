@@ -163,7 +163,7 @@ void Restaurant::RandomizingCooks()
 	Cook** arrCook = AllCookQueue.toArray(c1);
 	for(int i=0;i<c1;i++)
 	{
-		if(arrCook[i]->getStatus() == BUSY)
+		if(arrCook[i]->getStatus() == BUSY && arrCook[i]->getStatus() != INJURED )
 			arrCook[i]->setR(RandomizeR());
 	}
 
@@ -670,7 +670,7 @@ void Restaurant::InjuryHandling()
 	{
 		//////////////////////////////////////////////
 		//////////////////////////////////////////////////////
-		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() && arrVIPCook[j]->GetR() != 0)
+		if (arrVIPCook[j]->getStatus() == BUSY && arrVIPCook[j]->GetR() <= arrVIPCook[j]->getInjProp() )
 		{
 			arrVIPCook[j]->setStatus(INJURED);
 			NoInjuredCooks++;
@@ -714,10 +714,12 @@ void Restaurant::InjuryHandling()
 	Cook** arrNCook = NormalCookQueue.toArray(c2);
 	for (int j = 0; j < c2; j++)
 	{
-		if (arrNCook[j]->getStatus() == BUSY && arrNCook[j]->GetR() <= arrNCook[j]->getInjProp() && arrNCook[j]->GetR() != 0)
+		if (arrNCook[j]->getStatus() == BUSY && arrNCook[j]->GetR() <= arrNCook[j]->getInjProp() )
 		{
 			arrNCook[j]->setStatus(INJURED);
 			arrNCook[j]->setSpeed(arrNCook[j]->getSpeed() / 2);
+			NoInjuredCooks++;
+
 
 			int ServC = 0;
 			Order** ServArr = InService.toArray(ServC);
@@ -758,10 +760,11 @@ void Restaurant::InjuryHandling()
 	for (int j = 0; j < c3; j++)
 	{
 
-		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp() && arrVegCook[j]->GetR() != 0)
+		if (arrVegCook[j]->getStatus() == BUSY && arrVegCook[j]->GetR() <= arrVegCook[j]->getInjProp())
 		{
 			arrVegCook[j]->setStatus(INJURED);
 			arrVegCook[j]->setSpeed(arrVegCook[j]->getSpeed() / 2);
+			NoInjuredCooks++;
 
 			int ServC = 0;
 			Order** ServArr = InService.toArray(ServC);
@@ -1258,11 +1261,10 @@ void Restaurant::ModesFunction()
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
 
-
+			RandomizingCooks();
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
-			//		RandomizingCooks();
 			InjuryHandling();
 			FinishLogic();
 			AutoPromotion();

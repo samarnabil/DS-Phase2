@@ -1,27 +1,12 @@
 FT  ID  AT  WT  ST  
-7   1   2   0   5   
-8   4   2   0   6   
-10   2   2   0   8   
-13   8   3   5   5   
-13   9   3   6   4   
-17   14   11   0   6   
-17   3   2   12   3   
-20   5   2   12   6   
-21   7   3   16   2   
-22   17   12   6   4   
-28   11   8   16   4   
-33   16   12   17   4   
-34   13   11   16   7   
-34   15   12   16   6   
-37   18   12   22   3   
-39   20   29   9   1   
-41   22   12   23   6   
-42   21   30   10   2   
-46   19   14   21   11   
-51   10   8   39   4   
-63   12   8   50   5   
+14   2   8   0   6   
+27   3   8   0   19   
+27   4   8   0   19   
+27   5   8   0   19   
+27   6   8   0   19   
+27   7   8   0   19   
 ....................
-Orders:21   [Norm:2, Veg:4, VIP:15]
-Cooks:3    [Norm:1, Veg:1, VIP:1, Injured:0, Break:1]
-Avg Wait:14.09   Avg Serv:4.85
-Urgent Orders:6  Auto-promoted:38 %
+Orders:6   [Norm:0, Veg:0, VIP:6]
+Cooks:6    [Norm:3, Veg:2, VIP:1, Injured:6, Break:0]
+Avg Wait:0   Avg Serv:16.83
+Urgent Orders:0  Auto-promoted:0 %
