@@ -215,7 +215,6 @@ void Restaurant::fileLoading(ifstream &inp)
 		BNfinal=(double)rand()/(RAND_MAX+1)*((BNmax+1)-BNmin)+BNmin;
 		BGfinal=(double)rand()/(RAND_MAX+1)*((BGmax+1)-BGmin)+BGmin;
 		BVfinal=(double)rand()/(RAND_MAX+1)*((BVmax+1)-BVmin)+BVmin;
-
 		}
 		for(int i=0;i<N;i++)
 		{
@@ -225,7 +224,6 @@ void Restaurant::fileLoading(ifstream &inp)
 			getNormalCookQueue().enqueue(pCo);
 			TotalCooksNumbers++;
 			NcookNumber++;
-
 		}
 		for(int i=0;i<G;i++)
 		{
@@ -304,14 +302,7 @@ void Restaurant::fileExporting(ofstream &out)
 	float AvgWtime;
 	Order** ServArr = Finished.toArray(count);
 	Cook* pCo;
-	int breeek = 0;
-	int breakk=0;
-	Cook** allcooks = AllCookQueue.toArray(breeek);
-	for(int i=0;i<breeek;i++)
-	{
-		if(allcooks[i]->getStatus() == INBREAK)
-			breakk++;
-	}
+
 	if(out.is_open())
 	{
 		out<<"FT  "<<"ID  "<<"AT  "<<"WT  "<<"ST  "<<endl;
@@ -334,7 +325,7 @@ void Restaurant::fileExporting(ofstream &out)
 
 		out<<"...................."<<endl;
 		out<<"Orders:"<<count<<"   "<<"[Norm:"<<countN<<", "<<"Veg:"<<countVeg<<", "<<"VIP:"<<countVIP<<"]"<<endl;
-		out<<"Cooks:"<<TotalCooksNumbers<<"    "<<"[Norm:"<<NcookNumber<<", "<<"Veg:"<<VegcookNumber<<", "<<"VIP:"<<VcookNumber<<", "<<"Injured:"<<NoInjuredCooks<<", "<<"Break:"<<breakk<<"]"<<endl;
+		out<<"Cooks:"<<TotalCooksNumbers<<"    "<<"[Norm:"<<NcookNumber<<", "<<"Veg:"<<VegcookNumber<<", "<<"VIP:"<<VcookNumber<<", "<<"Injured:"<<NoInjuredCooks<<"]"<<endl;
 		out<<"Avg Wait:"<<AvgWtime<<"   "<<"Avg Serv:"<<AvgStime<<endl;
 		out<<"Urgent Orders:"<<NoUrgentOrders<<"  "<<"Auto-promoted:"<<AutoPromperc<<" %"<<endl;
 		out.close();
@@ -1208,8 +1199,6 @@ void Restaurant::ModesFunction()
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
 
-			//RandomizingCooks();
-			setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1225,8 +1214,36 @@ void Restaurant::ModesFunction()
 			CurrentTimeStep++;	//advance timestep
 
 		}
-		ofstream out("OUTPUT.txt");
+		if(filename == "TC1.txt")
+		{
+		ofstream out("Out_TC1.txt");
 		fileExporting(out);
+		}
+		else if( filename == "TC2.txt")
+		{
+		ofstream out("Out_TC2.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC3.txt")
+		{
+		ofstream out("Out_TC3.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC4.txt")
+		{
+		ofstream out("Out_TC4.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC5.txt")
+		{
+		ofstream out("Out_TC5.txt");
+		fileExporting(out);
+		}
+      	else if( filename == "TC6.txt")
+		{
+		ofstream out("Out_TC6.txt");
+		fileExporting(out);
+		}
 		pGUI->PrintMessage("generation done, click to END program");
 		pGUI->waitForClick();
 
@@ -1255,7 +1272,6 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
-		//	RandomizingCooks();
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1272,8 +1288,36 @@ void Restaurant::ModesFunction()
 			CurrentTimeStep++;	//advance timestep
 
 		}
-		ofstream out("OUTPUT.txt");
+		if(filename == "TC1.txt")
+		{
+		ofstream out("Out_TC1.txt");
 		fileExporting(out);
+		}
+		else if( filename == "TC2.txt")
+		{
+		ofstream out("Out_TC2.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC3.txt")
+		{
+		ofstream out("Out_TC3.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC4.txt")
+		{
+		ofstream out("Out_TC4.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC5.txt")
+		{
+		ofstream out("Out_TC5.txt");
+		fileExporting(out);
+		}
+      	else if( filename == "TC6.txt")
+		{
+		ofstream out("Out_TC6.txt");
+		fileExporting(out);
+		}
 		pGUI->PrintMessage("generation done, click to END program");
 		pGUI->waitForClick();
 	}
@@ -1300,8 +1344,6 @@ void Restaurant::ModesFunction()
 
 			ExecuteEvents(CurrentTimeStep);	//execute all events at current time step
 
-			//RandomizingCooks();
-			//setR(RandomizeR());
 			UrgentOrders();
 			BreakHandling();
 			Assignment();
@@ -1313,8 +1355,36 @@ void Restaurant::ModesFunction()
 			CurrentTimeStep++;	//advance timestep
 
 		}
-		ofstream out("OUTPUT.txt");
+			if(filename == "TC1.txt")
+		{
+		ofstream out("Out_TC1.txt");
 		fileExporting(out);
+		}
+		else if( filename == "TC2.txt")
+		{
+		ofstream out("Out_TC2.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC3.txt")
+		{
+		ofstream out("Out_TC3.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC4.txt")
+		{
+		ofstream out("Out_TC4.txt");
+		fileExporting(out);
+		}
+		else if( filename == "TC5.txt")
+		{
+		ofstream out("Out_TC5.txt");
+		fileExporting(out);
+		}
+      	else if( filename == "TC6.txt")
+		{
+		ofstream out("Out_TC6.txt");
+		fileExporting(out);
+		}
 		pGUI->PrintMessage("generation done, click to END program");
 		pGUI->waitForClick();
 	}
